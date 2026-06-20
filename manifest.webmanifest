@@ -1,9 +1,9 @@
 {
-  "name": "Object Lens Camera Classifier",
+  "name": "Object Lens YOLO Snapshot Detector",
   "short_name": "Object Lens",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f3f6f8",
   "theme_color": "#0f8f7a",
-  "description": "Mobile-first browser camera object classifier using TensorFlow.js MobileNet."
+  "description": "Mobile-first browser camera snapshot detector using YOLO ONNX."
 }

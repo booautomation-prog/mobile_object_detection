@@ -4,11 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0f8f7a">
-  <title>Object Lens Camera Classifier</title>
+  <title>Object Lens YOLO Snapshot Detector</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.min.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -22,7 +21,7 @@
         </span>
         <div>
           <h1>Object Lens</h1>
-          <p>Camera object classifier</p>
+          <p>One-photo YOLO detector</p>
         </div>
       </div>
       <div class="status-chip" aria-live="polite">
@@ -35,7 +34,8 @@
       <section class="camera-panel" aria-label="Camera preview">
         <div class="viewfinder">
           <video id="video" playsinline muted autoplay></video>
-          <canvas id="snapshotCanvas" aria-hidden="true"></canvas>
+          <canvas id="snapshotCanvas" aria-label="Captured photo"></canvas>
+          <canvas id="boxCanvas" aria-label="YOLO detection boxes"></canvas>
           <div id="cameraEmpty" class="camera-empty">
             <span class="camera-glyph" aria-hidden="true">
               <svg viewBox="0 0 48 48" role="img">
@@ -43,7 +43,7 @@
               </svg>
             </span>
             <strong>Camera is off</strong>
-            <span>Start camera to classify objects live.</span>
+            <span>Open camera, take one snapshot, then run YOLO detection.</span>
           </div>
           <button id="overlaySwitchButton" class="overlay-switch" type="button" disabled aria-label="Switch camera">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -59,9 +59,9 @@
         <div class="camera-meta">
           <span id="classifyState" class="classify-state">
             <span class="spinner" aria-hidden="true"></span>
-            <span>Loading model</span>
+            <span>Loading YOLO</span>
           </span>
-          <span id="modelName">Model: MobileNet</span>
+          <span id="modelName">Model: YOLO ONNX</span>
         </div>
       </section>
 
@@ -73,18 +73,18 @@
             </svg>
           </span>
           <div>
-            <span class="small-label">Best match</span>
-            <strong id="bestClass">Waiting for camera</strong>
-            <span id="bestConfidence">Confidence: --</span>
+            <span class="small-label">Detections</span>
+            <strong id="bestClass">No snapshot yet</strong>
+            <span id="bestConfidence">Take one photo to detect objects</span>
           </div>
         </div>
 
         <div class="matches-head">
-          <h2>Top Matches</h2>
-          <span id="fpsText">-- fps</span>
+          <h2>Detected Objects</h2>
+          <span id="fpsText">single shot</span>
         </div>
         <div id="matchesList" class="matches-list" aria-live="polite">
-          <div class="empty-match">Predictions will appear here.</div>
+          <div class="empty-match">YOLO detections will appear here.</div>
         </div>
       </section>
     </section>
@@ -94,7 +94,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M9 5 7.2 7.4H4a2 2 0 0 0-2 2V17a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9.4a2 2 0 0 0-2-2h-3.2L15 5H9Zm3 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"/>
         </svg>
-        Start Camera
+        Open Camera
       </button>
       <button id="switchButton" class="secondary-action" type="button" disabled>
         <svg viewBox="0 0 24 24" aria-hidden="true">

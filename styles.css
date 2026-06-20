@@ -180,7 +180,8 @@ h1 {
 }
 
 #video,
-#snapshotCanvas {
+#snapshotCanvas,
+#boxCanvas {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -189,7 +190,6 @@ h1 {
 }
 
 #video {
-  transform: scaleX(-1);
   opacity: 0;
   transition: opacity 180ms ease;
 }
@@ -200,6 +200,21 @@ h1 {
 
 #snapshotCanvas {
   display: none;
+}
+
+#boxCanvas {
+  display: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#snapshotCanvas.active,
+#boxCanvas.active {
+  display: block;
+}
+
+.viewfinder.has-snapshot #video {
+  opacity: 0;
 }
 
 .camera-empty {
