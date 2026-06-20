@@ -13,7 +13,7 @@ const startButton = document.getElementById("startButton");
 const switchButton = document.getElementById("switchButton");
 const overlaySwitchButton = document.getElementById("overlaySwitchButton");
 
-const MODEL_URL = "models/yolov8n.onnx";
+const MODEL_URL = "yolov8n.onnx";
 const MODEL_INPUT_SIZE = 640;
 const CONFIDENCE_THRESHOLD = 0.25;
 const IOU_THRESHOLD = 0.45;
